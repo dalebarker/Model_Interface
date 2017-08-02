@@ -1,12 +1,3 @@
-/*
- * (C) Copyright 2009-2016 ECMWF.
- *
- * This software is licensed under the terms of the Apache Licence Version 2.0
- * which can be obtained at http://www.apache.org/licenses/LICENSE-2.0.
- * In applying this licence, ECMWF does not waive the privileges and immunities
- * granted to it by virtue of its status as an intergovernmental organisation nor
- * does it submit to any jurisdiction.
- */
 
 #ifndef XXXX_MODEL_XXXXINCREMENT_H_
 #define XXXX_MODEL_XXXXINCREMENT_H_
@@ -17,8 +8,8 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 
-#include "model/XxxxFields.h"
-#include "model/XxxxGeometry.h"
+#include "model/Fields.h"
+#include "model/Geometry.h"
 #include "oops/base/GeneralizedDepartures.h"
 #include "util/DateTime.h"
 #include "util/Duration.h"
@@ -31,8 +22,8 @@ namespace eckit {
 }
 
 namespace xxxx {
-  class XxxxState;
-  class XxxxVariables;
+  class State;
+  class Variables;
 
 /// Increment Class: Difference between two states
 /*!
@@ -43,30 +34,30 @@ namespace xxxx {
 
 // -----------------------------------------------------------------------------
 
-class XxxxIncrement : public oops::GeneralizedDepartures,
+class Increment : public oops::GeneralizedDepartures,
                     public util::Printable,
-                    private util::ObjectCounter<XxxxIncrement> {
+                    private util::ObjectCounter<Increment> {
  public:
-  static const std::string classname() {return "xxxx::XxxxIncrement";}
+  static const std::string classname() {return "xxxx::Increment";}
 
 /// Constructor, destructor
-  XxxxIncrement(const XxxxGeometry &, const XxxxVariables &, const util::DateTime &);
-  XxxxIncrement(const XxxxGeometry &, const XxxxIncrement &);
-  XxxxIncrement(const XxxxIncrement &, const bool);
-  XxxxIncrement(const XxxxIncrement &);
-  virtual ~XxxxIncrement();
+  Increment(const Geometry &, const Variables &, const util::DateTime &);
+  Increment(const Geometry &, const Increment &);
+  Increment(const Increment &, const bool);
+  Increment(const Increment &);
+  virtual ~Increment();
 
 /// Basic operators
-  void diff(const XxxxState &, const XxxxState &);
+  void diff(const State &, const State &);
   void zero();
   void zero(const util::DateTime &);
-  XxxxIncrement & operator =(const XxxxIncrement &);
-  XxxxIncrement & operator+=(const XxxxIncrement &);
-  XxxxIncrement & operator-=(const XxxxIncrement &);
-  XxxxIncrement & operator*=(const double &);
-  void axpy(const double &, const XxxxIncrement &, const bool check = true);
-  double dot_product_with(const XxxxIncrement &) const;
-  void schur_product_with(const XxxxIncrement &);
+  Increment & operator =(const Increment &);
+  Increment & operator+=(const Increment &);
+  Increment & operator-=(const Increment &);
+  Increment & operator*=(const double &);
+  void axpy(const double &, const Increment &, const bool check = true);
+  double dot_product_with(const Increment &) const;
+  void schur_product_with(const Increment &);
   void random();
 
 /// Interpolate to observation location
@@ -82,10 +73,10 @@ class XxxxIncrement : public oops::GeneralizedDepartures,
   void updateTime(const util::Duration & dt) {fields_->time() += dt;}
 
 /// Access to fields
-  XxxxFields & fields() {return *fields_;}
-  const XxxxFields & fields() const {return *fields_;}
+  Fields & fields() {return *fields_;}
+  const Fields & fields() const {return *fields_;}
 
-  boost::shared_ptr<const XxxxGeometry> geometry() const {
+  boost::shared_ptr<const Geometry> geometry() const {
     return fields_->geometry();
   }
 
@@ -93,13 +84,13 @@ class XxxxIncrement : public oops::GeneralizedDepartures,
   void activateModel();
   void deactivateModel();
 
-  void accumul(const double &, const XxxxState &);
+  void accumul(const double &, const State &);
 
 /// Data
  private:
   void print(std::ostream &) const;
-  boost::scoped_ptr<XxxxFields> fields_;
-  boost::scoped_ptr<XxxxFields> stash_;
+  boost::scoped_ptr<Fields> fields_;
+  boost::scoped_ptr<Fields> stash_;
 };
 // -----------------------------------------------------------------------------
 
